@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>ESNILOMA | Supermercado Pro</title>
+    
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --azul-barra: #1a3a6d;
+            --azul-oscuro: #0a2558;
+            --verde-boton: #4cd137;
+            --fondo-app: #f4f6f9;
+            --blanco: #ffffff;
+            --sombra: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #1e272e;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 430px;
+            background: var(--fondo-app);
+            min-height: 100vh;
+            padding-bottom: 50px;
+            box-shadow: 0 0 60px rgba(0,0,0,0.5);
+        }
+
+        /* BARRA SUPERIOR PROFESIONAL */
+        .top-nav {
+            background: var(--azul-barra);
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .search-mock {
+            background: rgba(255,255,255,0.12);
+            flex: 1;
+            margin: 0 15px;
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* HEADER Y ANIMACIÓN DE LOGO */
+        .header-section { text-align: center; padding: 40px 20px 20px; }
+        
+        .logo-box {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            margin: 0 auto;
+        }
+
+        /* Animación de Levitación (Floating) */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Animación de Sombra */
+        @keyframes shadow-pulse {
+            0% { transform: scale(1); opacity: 0.2; }
+            50% { transform: scale(1.2); opacity: 0.1; }
+            100% { transform: scale(1); opacity: 0.2; }
+        }
+
+        .logo-img {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 6px solid white;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 2;
+            animation: float 4s ease-in-out infinite; /* El logo flota */
+        }
+
+        .logo-shadow {
+            width: 80px;
+            height: 15px;
+            background: black;
+            border-radius: 50%;
+            margin: -10px auto 0;
+            filter: blur(8px);
+            animation: shadow-pulse 4s ease-in-out infinite; /* La sombra reacciona */
+        }
+
+        .logo-img img { width: 100%; height: 100%; object-fit: contain; }
+
+        .brand-name { color: var(--azul-barra); font-weight: 800; margin: 25px 0 5px; font-size: 26px; }
+        .brand-tag { color: var(--verde-boton); font-weight: 700; margin: 0; font-size: 15px; letter-spacing: 2px; }
+
+        /* PRODUCTOS */
+        .section-header {
+            padding: 30px 20px 15px;
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--azul-barra);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .scroller {
+            display: flex;
+            overflow-x: auto;
+            padding: 5px 20px 20px;
+            gap: 18px;
+            scrollbar-width: none;
+        }
+        .scroller::-webkit-scrollbar { display: none; }
+
+        .card {
+            min-width: 150px;
+            background: white;
+            border-radius: 22px;
+            padding: 18px;
+            box-shadow: var(--sombra);
+            text-align: center;
+            border: 1px solid rgba(0,0,0,0.02);
+        }
+
+        .card img { width: 90px; height: 90px; object-fit: contain; margin-bottom: 12px; }
+        .card .price { font-weight: 800; color: #1e272e; font-size: 18px; display: block; margin-bottom: 12px; }
+
+        .btn-buy {
+            background: var(--verde-boton);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 14px;
+            font-weight: 800;
+            font-size: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(76, 209, 55, 0.2);
+        }
+
+        /* CARRITO PREMIUM */
+        .cart-box {
+            margin: 20px;
+            background: var(--azul-oscuro);
+            border-radius: 24px;
+            padding: 25px;
+            color: white;
+            display: none;
+            box-shadow: 0 20px 40px rgba(10, 37, 88, 0.2);
+        }
+
+        .total-display { font-size: 38px; font-weight: 800; display: block; margin-top: 10px; }
+
+        .btn-wa {
+            background: var(--verde-boton);
+            color: white;
+            border: none;
+            width: calc(100% - 40px);
+            margin: 10px 20px;
+            padding: 20px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 800;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 10px 25px rgba(76, 209, 55, 0.4);
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="top-nav">
+        <ion-icon name="grid-outline"></ion-icon>
+        <div class="search-mock">
+            <ion-icon name="search-outline"></ion-icon>
+            Buscar en ESNILOMA...
+        </div>
+        <ion-icon name="person-circle-outline"></ion-icon>
+    </div>
+
+    <div class="header-section">
+        <div class="logo-box">
+            <div class="logo-img">
+                <img src="logo.png" alt="Logo">
+            </div>
+            <div class="logo-shadow"></div>
+        </div>
+        <h1 class="brand-name">ESNILOMA SRL</h1>
+        <p class="brand-tag">CALIDAD SUPERIOR 🚀</p>
+    </div>
+
+    <div class="section-header"><ion-icon name="flash" style="color:#fbc531"></ion-icon> OFERTAS EXCLUSIVAS</div>
+    <div class="scroller">
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=200">
+            <h4>Arroz Selecto</h4>
+            <span class="price">$79.90</span>
+            <button class="btn-buy" onclick="add('Arroz', 79.90)">AÑADIR</button>
+        </div>
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=200">
+            <h4>Aceite Crisol</h4>
+            <span class="price">$39.90</span>
+            <button class="btn-buy" onclick="add('Aceite', 39.90)">AÑADIR</button>
+        </div>
+    </div>
+
+    <div class="section-header">DATOS DE ENTREGA</div>
+    <div style="padding: 0 20px;">
+        <input type="text" id="cli" placeholder="Tu Nombre" style="width:100%; padding:18px; border-radius:15px; border:none; margin-bottom:12px; background:white; box-shadow: var(--sombra);">
+        <input type="text" id="ubi" placeholder="Tu Dirección Exacta" style="width:100%; padding:18px; border-radius:15px; border:none; background:white; box-shadow: var(--sombra);">
+    </div>
+
+    <div id="cartPremium" class="cart-box">
+        <h3 style="margin:0; opacity:0.8; font-size:16px;">RESUMEN DE PEDIDO</h3>
+        <div id="itemsList" style="margin: 15px 0;"></div>
+        <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top:15px;">
+            <span style="font-size:12px; opacity:0.6;">TOTAL A PAGAR</span>
+            <span class="total-display">$<span id="t">0.00</span></span>
+        </div>
+    </div>
+
+    <button id="btnWA" class="btn-wa" onclick="send()">
+        CONFIRMAR PEDIDO <ion-icon name="logo-whatsapp"></ion-icon>
+    </button>
+</div>
+
+<script>
+    let cart = {};
+    let total = 0;
+
+    function add(n, p) {
+        if (cart[n]) cart[n].q += 1;
+        else cart[n] = { p: p, q: 1 };
+        total += p;
+        draw();
+        if(navigator.vibrate) navigator.vibrate(20);
+    }
+
+    function draw() {
+        const list = document.getElementById('itemsList');
+        list.innerHTML = "";
+        for (let k in cart) {
+            list.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                <span>${k} x${cart[k].q}</span>
+                <span>$${(cart[k].p * cart[k].q).toFixed(2)}</span>
+            </div>`;
+        }
+        document.getElementById('t').innerText = total.toFixed(2);
+        document.getElementById('cartPremium').style.display = total > 0 ? 'block' : 'none';
+        document.getElementById('btnWA').style.display = total > 0 ? 'flex' : 'none';
+    }
+
+    function send() {
+        const c = document.getElementById('cli').value;
+        const u = document.getElementById('ubi').value;
+        if(!c || !u) return alert("Ingresa tus datos");
+        let txt = `¡Pedido Nuevo!%0ACliente: ${c}%0AUbicación: ${u}%0A%0A`;
+        for (let i in cart) txt += `• ${i} x${cart[i].q}%0A`;
+        window.open(`https://wa.me/8097600364?text=${txt}*Total:* $${total.toFixed(2)}`);
+    }
+</script>
+</body>
+</html>

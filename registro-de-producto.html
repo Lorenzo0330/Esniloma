@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESNILOMA | Admin Cámara</title>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --azul: #1a3a6d; --verde: #4cd137; --fondo: #f4f6f9; }
+        body { font-family: 'Outfit', sans-serif; background: var(--fondo); margin: 0; padding-bottom: 100px; }
+        
+        .admin-panel { background: white; padding: 20px; margin: 15px; border-radius: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 2px solid var(--azul); }
+        .admin-panel h2 { margin: 0 0 15px; color: var(--azul); font-size: 18px; text-align: center; }
+        
+        input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 12px; border: 1px solid #ddd; outline: none; font-family: 'Outfit'; }
+        
+        /* BOTÓN DE CÁMARA */
+        .camera-box { 
+            width: 100%; 
+            height: 150px; 
+            border: 2px dashed #ccc; 
+            border-radius: 15px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            margin: 10px 0; 
+            overflow: hidden;
+            position: relative;
+            background: #fdfdfd;
+        }
+        .camera-box img { width: 100%; height: 100%; object-fit: cover; display: none; }
+        .camera-box ion-icon { font-size: 40px; color: #999; }
+        #fileInput { display: none; }
+
+        .btn-add { background: var(--azul); color: white; border: none; width: 100%; padding: 15px; border-radius: 12px; font-weight: 800; cursor: pointer; margin-top: 10px; }
+        
+        /* DISEÑO DE PRODUCTOS */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
+        .card { background: white; padding: 15px; border-radius: 25px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); position: relative; }
+        .product-circle { width: 100px; height: 100px; border-radius: 50%; background: #eee; margin: 0 auto 10px; overflow: hidden; border: 3px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .product-circle img { width: 100%; height: 100%; object-fit: cover; }
+        .btn-del { position: absolute; top: 10px; right: 10px; color: #ff4757; font-size: 20px; background: white; border-radius: 50%; }
+    </style>
+</head>
+<body>
+
+    <div class="admin-panel">
+        <h2>🛠 Digitar Producto</h2>
+        
+        <div class="camera-box" onclick="document.getElementById('fileInput').click()">
+            <ion-icon name="camera" id="camIcon"></ion-icon>
+            <span id="camText" style="font-size: 12px; color: #999;">Tocar para tirar foto</span>
+            <img id="preview">
+        </div>
+        <input type="file" id="fileInput" accept="image/*" capture="environment" onchange="previewImage(this)">
+
+        <input type="text" id="pNombre" placeholder="Nombre del producto">
+        <input type="number" id="pPrecio" placeholder="Precio RD$">
+        <button class="btn-add" onclick="guardarProducto()">PUBLICAR AHORA</button>
+    </div>
+
+    <h3 style="padding: 0 20px; color: var(--azul);">📦 Catálogo Activo</h3>
+    <div class="grid" id="contenedor"></div>
+
+<script>
+    let misProductos = JSON.parse(localStorage.getItem('productos')) || [];
+    let currentImage = "";
+
+    // Función para procesar la foto tirada
+    function previewImage(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('preview').src = e.target.result;
+                document.getElementById('preview').style.display = 'block';
+                document.getElementById('camIcon').style.display = 'none';
+                document.getElementById('camText').style.display = 'none';
+                currentImage = e.target.result; // Aquí se guarda la foto en texto (Base64)
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function guardarProducto() {
+        const nombre = document.getElementById('pNombre').value;
+        const precio = document.getElementById('pPrecio').value;
+        
+        if(nombre && precio && currentImage) {
+            const nuevo = { id: Date.now(), nombre, precio, img: currentImage };
+            misProductos.push(nuevo);
+            localStorage.setItem('productos', JSON.stringify(misProductos));
+            
+            // Limpiar todo
+            document.getElementById('pNombre').value = '';
+            document.getElementById('pPrecio').value = '';
+            document.getElementById('preview').style.display = 'none';
+            document.getElementById('camIcon').style.display = 'block';
+            document.getElementById('camText').style.display = 'block';
+            currentImage = "";
+            
+            renderizar();
+        } else {
+            alert("¡Falta la foto o los datos!");
+        }
+    }
+
+    function renderizar() {
+        const contenedor = document.getElementById('contenedor');
+        contenedor.innerHTML = "";
+        misProductos.forEach(p => {
+            contenedor.innerHTML += `
+                <div class="card">
+                    <ion-icon name="close-circle" class="btn-del" onclick="eliminar(${p.id})"></ion-icon>
+                    <div class="product-circle"><img src="${p.img}"></div>
+                    <b style="font-size:14px; display:block; height:35px;">${p.nombre}</b>
+                    <span style="color:var(--verde); font-weight:800;">$${p.precio}</span>
+                </div>
+            `;
+        });
+    }
+
+    function eliminar(id) {
+        misProductos = misProductos.filter(p => p.id !== id);
+        localStorage.setItem('productos', JSON.stringify(misProductos));
+        renderizar();
+    }
+
+    renderizar();
+</script>
+</body>
+</html>
