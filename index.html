@@ -204,7 +204,7 @@
         <ion-icon name="grid-outline"></ion-icon>
         <div class="search-mock">
             <ion-icon name="search-outline"></ion-icon>
-            Buscar en ESNILOMA...
+            Buscar Productos...
         </div>
         <ion-icon name="person-circle-outline"></ion-icon>
     </div>
@@ -217,7 +217,7 @@
             <div class="logo-shadow"></div>
         </div>
         <h1 class="brand-name">ESNILOMA SRL</h1>
-        <p class="brand-tag">CALIDAD SUPERIOR 🚀</p>
+        <p class="brand-tag">El colmado a tu casa 🚀</p>
     </div>
 
     <div class="section-header"><ion-icon name="flash" style="color:#fbc531"></ion-icon> OFERTAS EXCLUSIVAS</div>
@@ -225,7 +225,7 @@
         <div class="card">
             <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=200">
             <h4>Arroz Selecto</h4>
-            <span class="price">$79.90</span>
+            <span class="price">40.00</span>
             <button class="btn-buy" onclick="add('Arroz', 79.90)">AÑADIR</button>
         </div>
         <div class="card">
@@ -288,8 +288,9 @@
         if(!c || !u) return alert("Ingresa tus datos");
         let txt = `¡Pedido Nuevo!%0ACliente: ${c}%0AUbicación: ${u}%0A%0A`;
         for (let i in cart) txt += `• ${i} x${cart[i].q}%0A`;
-        window.open(`https://wa.me/8097600364?text=${txt}*Total:* $${total.toFixed(2)}`);
+        window.open(`https://wa.me/18097600364?text=${txt}*Total:* $${total.toFixed(2)}`);
     }
 </script>
 </body>
 </html>
+
